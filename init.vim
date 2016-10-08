@@ -46,9 +46,9 @@ colorscheme molokai
 :set cinoptions=(0,u0,U0
 
 "Relative line numbers
-:set rnu  
+:set rnu
 "Current line keeps absolute line number
-:set nu  
+:set nu
 :let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
 " Turn off pymode completion (interferes w/ deoplete)
@@ -61,12 +61,11 @@ let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 :set listchars+=space:·
 :set listchars+=eol:¬
 hi SpecialKey ctermfg=7 guifg=gray
-cnoremap <F3> <C-c>:set list!<CR>
-inoremap <F3> <C-c>:set list!<CR>
-noremap <F3> <C-c>:set list!<CR>
-let mapleader = " "
+cnoremap <F5> <C-c>:set list!<CR>
+inoremap <F5> <C-c>:set list!<CR>
+noremap <F5> <C-c>:set list!<CR>
 
-set mouse=a
+
 
 let &colorcolumn="80,".join(range(120,999),",")
 :set guioptions-=m  "remove menu bar
@@ -86,15 +85,37 @@ let g:echodoc_enable_at_startup = 1
 
 set clipboard+=unnamedplus
 
+"Function creating defaul split layout with terminal in the bottom split
+function! DoSplit()
+	:split
+	:resize 45
+	:vsplit
+	:execute "normal \<C-j>"
+	:terminal
+	:call feedkeys("\<C-\>") "this and next cmd enters normal mode in term
+	:call feedkeys("\<C-n>")
+	:call feedkeys("\<C-k>") "move back to top split
+endfunction
 
-:tnoremap <A-h> <C-\><C-n><C-w>h
-:tnoremap <A-j> <C-\><C-n><C-w>j
-:tnoremap <A-k> <C-\><C-n><C-w>k
-:tnoremap <A-l> <C-\><C-n><C-w>l
-:nnoremap <A-h> <C-w>h
-:nnoremap <A-j> <C-w>j
-:nnoremap <A-k> <C-w>k
-:nnoremap <A-l> <C-w>l
+nmap <F12> :call DoSplit()<CR>
+
+
+"Force disable mouse
+set mouse-=a
+
+"Leader key
+let mapleader = " "
+
+vnoremap <Leader>s :sort<CR>
+
+:tnoremap <C-h> <C-\><C-n><C-w>h
+:tnoremap <C-j> <C-\><C-n><C-w>j
+:tnoremap <C-k> <C-\><C-n><C-w>k
+:tnoremap <C-l> <C-\><C-n><C-w>l
+:nnoremap <C-h> <C-w>h
+:nnoremap <C-j> <C-w>j
+:nnoremap <C-k> <C-w>k
+:nnoremap <C-l> <C-w>l
 
 :tnoremap <A-Left> <C-\><C-n><C-w>h
 :tnoremap <A-Down> <C-\><C-n><C-w>j
@@ -105,3 +126,34 @@ set clipboard+=unnamedplus
 :nnoremap <A-Up> <C-w>k
 :nnoremap <A-Right> <C-w>l
 
+"Map Arrow keys to Ctrl h,j,k,l in insert mode to ease the use of deoplete
+:imap <C-h> <Left>
+:imap <C-j> <Down>
+:imap <C-k> <Up>
+:imap <C-l> <Right>
+
+"Use Ctrl+s as save
+:nmap <c-s> :w<CR>
+:imap <c-s> <Esc>:w<CR>
+"Save in insert mode and return to insert mode
+":imap <c-s> <Esc>:w<CR>a
+
+"Map F2 to :RopeGotoDefinition
+:nmap <F2> <C-c>g
+:imap <F2> <C-c>g
+":cnoremap <F2> <C-c>g
+":inoremap <F2> <C-c>g
+":noremap <F2> <C-c>g
+
+"Map F3 to jump backward (previous position)
+:cnoremap <F3> <C-o>
+:inoremap <F3> <C-o>
+:noremap <F3> <C-o>
+
+"Map F4 to jump forward (next position)
+:cnoremap <F4> <Tab>
+:inoremap <F4> <Tab>
+:noremap <F4> <Tab>
+
+"Map sort function
+vnoremap <Leader>s :sort<CR>
